@@ -106,7 +106,7 @@ namespace LocalIPScanner
             _sw.Stop();
             Console.WriteLine($"All network information compiled. Count: {compiledNetworkInfo.Length} Elapsed Time: {_sw.ElapsedMilliseconds}ms");
             _sw.Reset();
-            return JsonConvert.SerializeObject(compiledNetworkInfo);
+            return JsonConvert.SerializeObject(compiledNetworkInfo, Formatting.Indented);
         }
 
         private async Task<NetworkAdapterInfo> GetBasicAdapterInfo(IPAddress ip)

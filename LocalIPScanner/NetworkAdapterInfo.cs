@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 
 namespace LocalIPScanner
 {
@@ -33,7 +32,7 @@ namespace LocalIPScanner
 
     public class DnsInfo
     {
-        public DnsInfo(string domain, string host, IPAddress[] searchOrder)
+        public DnsInfo(string domain, string host, string[] searchOrder)
         {
             DnsDomain = domain;
             DnsHostName = host;
@@ -41,6 +40,6 @@ namespace LocalIPScanner
         }
         public string DnsDomain { get; private set; }
         public string DnsHostName { get; private set; }
-        public IPAddress[] DnsServerSearchOrder { get; private set; }
+        public string[] DnsServerSearchOrder { get; private set; }
     }
 }

@@ -124,7 +124,8 @@ namespace LocalIPScanner
             {
                 if (!bool.Parse(objMo["IPEnabled"].ToString()))
                     continue;
-                if (!objMo["IPAddress"].ToString().Contains(ip.ToString())) continue;
+                var ipAddress = (string[])objMo["IPAddress"];
+                if (!ipAddress.Contains(ip.ToString())) continue;
 
                 var objIndex = objMo["Index"].ToString();
                 if (!int.TryParse(objIndex, out var index))
@@ -160,7 +161,8 @@ namespace LocalIPScanner
             {
                 if (!bool.Parse(objMo["IPEnabled"].ToString()))
                     continue;
-                if (!objMo["IPAddress"].ToString().Contains(ip.ToString())) continue;
+                var ipAddress = (string[])objMo["IPAddress"];
+                if (!ipAddress.Contains(ip.ToString())) continue;
 
                 var enabled = bool.Parse(objMo["DHCPEnabled"].ToString());
                 var server = objMo["DHCPServer"].ToString();
@@ -180,13 +182,16 @@ namespace LocalIPScanner
             {
                 if (!bool.Parse(objMo["IPEnabled"].ToString()))
                     continue;
-                if (!objMo["IPAddress"].ToString().Contains(ip.ToString())) continue;
+                var ipAddress = (string[])objMo["IPAddress"];
+                if (!ipAddress.Contains(ip.ToString())) continue;
 
                 var domain = objMo["DNSDomain"].ToString();
                 var host = objMo["DNSHostName"].ToString();
                 var searchOrder = (string[])objMo["DNSServerSearchOrder"];
-                var ipOne = IPAddress.Parse(searchOrder[0]);
-                var ipTwo = IPAddress.Parse(searchOrder[1]);
+                var ipOne = searchOrder[0];
+                var ipTwo = string.Empty;
+                if (searchOrder.Length > 1)
+                    ipTwo = searchOrder[1];
                 adapter.DnsInfo = new DnsInfo(domain, host, new[] { ipOne, ipTwo });
                 break;
             }

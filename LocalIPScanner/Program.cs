@@ -144,10 +144,10 @@ namespace LocalIPScanner
 
                 adapter.Caption = objMo["Caption"].ToString();
                 adapter.Description = objMo["Description"].ToString();
+                SetDhcpInfo(adapter, ip);
+                SetDnsInfo(adapter, ip);
                 return adapter;
             }
-            SetDhcpInfo(adapter, ip);
-            SetDnsInfo(adapter, ip);
             return adapter;
         }
 

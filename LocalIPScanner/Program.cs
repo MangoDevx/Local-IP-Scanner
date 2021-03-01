@@ -109,29 +109,6 @@ namespace LocalIPScanner
             return JsonConvert.SerializeObject(compiledNetworkInfo);
         }
 
-        private void OutputInformation(string jsonOutput)
-        {
-            Console.WriteLine("Output to text? y/n");
-            var input = Console.ReadLine().ToLowerInvariant();
-            while (true)
-            {
-                if (input.Equals("y"))
-                {
-                    File.WriteAllText($@"NIOutput@{DateTime.Now}", jsonOutput);
-                    break;
-                }
-
-                if (input.Equals("n"))
-                {
-                    Console.WriteLine(jsonOutput);
-                    break;
-                }
-
-                Console.WriteLine("Invalid input. Please enter y or n");
-                Thread.Sleep(1);
-            }
-        }
-
         private async Task<NetworkAdapterInfo> GetBasicAdapterInfo(IPAddress ip)
         {
             var adapter = new NetworkAdapterInfo { Ip = ip };
@@ -212,6 +189,35 @@ namespace LocalIPScanner
                 var ipTwo = IPAddress.Parse(searchOrder[1]);
                 adapter.DnsInfo = new DnsInfo(domain, host, new[] { ipOne, ipTwo });
                 break;
+            }
+        }
+
+        private void OutputInformation(string jsonOutput)
+        {
+            Console.WriteLine("Output to text? y/n");
+            var input = Console.ReadLine().ToLowerInvariant();
+            while (true)
+            {
+                if (input.Equals("y"))
+                {
+                    var path = $@"NIOutput@{DateTime.Now}";
+                    File.WriteAllText(path, jsonOutput);
+                    Console.WriteLine($@"Outputted json result to {Environment.CurrentDirectory}\{path}");
+                    break;
+                }
+
+                if (input.Equals("n"))
+                {
+                    Console.WriteLine(jsonOutput);
+                    Console.WriteLine("Press any key to exit.");
+                    Console.ReadKey();
+                    Console.WriteLine("Exiting in 3 seconds...");
+                    Thread.Sleep(3000);
+                    Environment.Exit(-1);
+                }
+
+                Console.WriteLine("Invalid input. Please enter y or n");
+                Thread.Sleep(1);
             }
         }
     }

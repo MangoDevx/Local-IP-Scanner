@@ -5,7 +5,8 @@ namespace LocalIPScanner
 {
     public class NetworkAdapterInfo
     {
-        public IPAddress Ip { get; set; }
+        //public IPAddress Ip { get; set; }
+        public string Ip { get; set; } // What a pain Json.net couldn't parse System.Net.IPAddress, oh well.
         public int Index { get; set; }
         public int InterfaceIndex { get; set; }
         public string Caption { get; set; }

@@ -100,7 +100,7 @@ namespace LocalIPScanner
 
         private async Task<string> GetNicInformation(IEnumerable<IPAddress> possibleAddresses)
         {
-            Console.WriteLine("Beginning to compile all network information");
+            Console.WriteLine("Scanning and compiling network information...");
             _sw.Start();
             var compiledNetworkInfo = await Task.WhenAll(possibleAddresses.Select(GetBasicAdapterInfo).ToArray());
             _sw.Stop();
@@ -111,7 +111,7 @@ namespace LocalIPScanner
 
         private async Task<NetworkAdapterInfo> GetBasicAdapterInfo(IPAddress ip)
         {
-            var adapter = new NetworkAdapterInfo { Ip = ip };
+            var adapter = new NetworkAdapterInfo { Ip = ip.ToString() };
             var ping = new Ping();
             var response = await ping.SendPingAsync(ip, 400);
             adapter.InUse = response.Status == IPStatus.Success;
@@ -200,9 +200,16 @@ namespace LocalIPScanner
             {
                 if (input.Equals("y"))
                 {
-                    var path = $@"NIOutput@{DateTime.Now}";
+                    var date = DateTimeOffset.Now.ToString("s");
+                    date = date.Replace(':', '.');
+                    var path = $@"NIOutput{date}.json";
                     File.WriteAllText(path, jsonOutput);
                     Console.WriteLine($@"Outputted json result to {Environment.CurrentDirectory}\{path}");
+                    Console.WriteLine("Press any key to exit.");
+                    Console.ReadKey();
+                    Console.WriteLine("Exiting in 3 seconds...");
+                    Thread.Sleep(3000);
+                    Environment.Exit(-1);
                     break;
                 }
 

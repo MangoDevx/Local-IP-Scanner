@@ -106,7 +106,8 @@ namespace LocalIPScanner
             _sw.Stop();
             Console.WriteLine($"All network information compiled. Count: {compiledNetworkInfo.Length} Elapsed Time: {_sw.ElapsedMilliseconds}ms");
             _sw.Reset();
-            return JsonConvert.SerializeObject(compiledNetworkInfo, Formatting.Indented);
+            var formattedAdapters = ConvertShortAdapterInfos(compiledNetworkInfo);
+            return JsonConvert.SerializeObject(formattedAdapters, Formatting.Indented);
         }
 
         private async Task<NetworkAdapterInfo> GetBasicAdapterInfo(IPAddress ip)
@@ -145,6 +146,7 @@ namespace LocalIPScanner
 
                 adapter.Caption = objMo["Caption"].ToString();
                 adapter.Description = objMo["Description"].ToString();
+                if (adapter.Index == 0 || adapter.InterfaceIndex == 0) return adapter;
                 SetDhcpInfo(adapter, ip);
                 SetDnsInfo(adapter, ip);
                 return adapter;
@@ -195,6 +197,23 @@ namespace LocalIPScanner
                 adapter.DnsInfo = new DnsInfo(domain, host, new[] { ipOne, ipTwo });
                 break;
             }
+        }
+
+        private List<BaseNetworkInfo> ConvertShortAdapterInfos(NetworkAdapterInfo[] adapters)
+        {
+            var finishedList = new List<BaseNetworkInfo>();
+            foreach (var adapter in adapters)
+            {
+                if (adapter.DhcpInfo is null)
+                {
+                    var newAdapter = new NetworkAdapterInfoShort { Ip = adapter.Ip, InUse = adapter.InUse };
+                    finishedList.Add(newAdapter);
+                    continue;
+                }
+                finishedList.Add(adapter);
+            }
+
+            return finishedList;
         }
 
         private void OutputInformation(string jsonOutput)

@@ -50,7 +50,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseNetworkInfo.cs" />
     <Compile Include="NetworkAdapterInfo.cs" />
+    <Compile Include="NetworkAdapterInfoShort.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
